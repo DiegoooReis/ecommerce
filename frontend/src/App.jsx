@@ -22,7 +22,7 @@ function App() {
           count is {count}
         </button>
         <p>
-          armadilho crocodilho
+          Front funcional
         </p>
       </div>
       <p className="read-the-docs">
