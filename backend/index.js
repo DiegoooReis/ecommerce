@@ -1,21 +1,31 @@
-// Importa o framework Express
 const express = require('express');
+const cors = require("./middlewares/cors");
+const usersRouter = require("./routes/users");
+const loginRouter = require("./routes/login");
 
-// Cria a aplicação Express
 const app = express();
-
-// Define a porta em que o servidor vai rodar
 const port = 3000;
 
-// Middleware para entender JSON no corpo das requisições
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors);
 
-// Rota GET para o caminho "/"
+
+app.use("/login", loginRouter);
+app.use("/users", usersRouter);
+app.use((error, req, res, next) =>{
+  if (error instanceof SyntaxError && error.status === 400 && 'body' in error) {
+    return res.status(400).json({
+      error: "Cadastro ainda não realizado!",
+      message: "Cadastra-se e tente novamente"
+    })
+  }
+})
+
 app.get('/', (req, res) => {
   res.send('Back-end funcionando!');
 });
 
-// Faz o servidor "ouvir" a porta definida e mostrar mensagem no console
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
